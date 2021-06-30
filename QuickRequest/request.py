@@ -1,10 +1,60 @@
-import requests
+import requests, platform
 from colour_lib import caution, error, info
 debug = False
 
-def mk_req(api):
+tor_proxies = {
+    'http': 'socks5://127.0.0.1:9050',
+    'https': 'socks5://127.0.0.1:9050'
+}
+
+def mk_req(api,headers=False,json=False,type="get",tor=False):
     try:
-        req = requests.get(api)
+        if tor == True:
+            if platform.system() != "Windows":
+                req = requests.get(api,proxies=tor_proxies)
+                return req
+            else:
+                pass
+        if type == "get":
+            if headers != False:
+                if json != False:
+                    req = requests.get(api,headers=headers,json=json)
+                else:
+                    req = requests.get(api,headers=headers)
+            elif json != False:
+                if headers != False:
+                    req = requests.get(api,headers=headers,json=json)
+                else:
+                    req = requests.get(api)
+            else:
+                req = requests.get(api)
+        elif type == "post":
+            if headers != False:
+                if json != False:
+                    req = requests.post(api,headers=headers,json=json)
+                else:
+                    req = requests.post(api,headers=headers)
+            elif json != False:
+                if headers != False:
+                    req = requests.post(api,headers=headers,json=json)
+                else:
+                    req = requests.post(api)
+            else:
+                req = requests.post(api)
+        else:
+            if headers != False:
+                if json != False:
+                    req = requests.get(api,headers=headers,json=json)
+                else:
+                    req = requests.get(api,headers=headers)
+            elif json != False:
+                if headers != False:
+                    req = requests.get(api,headers=headers,json=json)
+                else:
+                    req = requests.get(api)
+            else:
+                req = requests.get(api)
+
         return req
     except ConnectionRefusedError as e:
         error(e,0)
@@ -47,8 +97,8 @@ def server_status(api):
     else:
         return False
 
-def req(api):
-    req = mk_req(api)
+def req(api,headers=False,json=False,type="get",tor=False):
+    req = mk_req(api,headers=headers,json=json,type=type,tor=tor)
     if req == False:
         return False
     reqs = req.status_code

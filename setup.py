@@ -4,7 +4,7 @@ project_name = 'QuickRequest'
 
 setup(
     name= project_name,
-    version='0.1.0',    
+    version='0.1.1',    
     description='A library for quick and dirty requests',
     url='https://github.com/harvey298/Quick-Request',
     author='harvey298',
